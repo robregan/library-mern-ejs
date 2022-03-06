@@ -1,7 +1,12 @@
 const express = require('express');
 const app = express();
 const expressLayouts = require('express-ejs-layouts');
+const bodyParser = require('body-parser');
+
+
 const indexRouter = require('./routes/index')
+const authorRouter = require('./routes/authors')
+
 
 const connectDB = require('./config/database')
 const MongoStore = require("connect-mongo")
@@ -9,7 +14,7 @@ const PORT = process.env.PORT || 3000
 require("dotenv").config({ path: "./config/.env" });
 
 //Body Parsing
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }));
 app.use(express.json());
 
 
@@ -33,6 +38,7 @@ connectDB()
 
 
 app.use('/' , indexRouter)
+app.use('/authors' , authorRouter)
 
 
 app.listen(PORT, () => {console.log(`Server running on port: ${PORT}`)})
